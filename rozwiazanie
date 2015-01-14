@@ -23,8 +23,8 @@ Condition Coverage
     
 		Inside secound if
       if (size != (long)fread(buffer, sizeof(GLchar), size, file))
-      7. size != wynik if(t)
-      8. size == wynik if(f)
+      7. size != wynik if(t) go to exit
+      8. size == wynik if(f) go forward
 
 
   // Rozmiar jest mniejszy od nagłówka
