@@ -1,0 +1,104 @@
+Condition Coverage
+
+  if (NULL != (file = fopen(filename, "rb")) &&
+    0 == fseek(file, 0, SEEK_END) &&
+    -1 != (size = ftell(file)))
+  {
+  
+  1. F file = null -> filename not exist ( If(f ,x,x) go to else exit)
+  2. file != null -> filename exist,
+	 file was removed during loading ( If(t,f,x) go to else exit)
+  3. file !=null -> filename exist,
+	 file was seeked to end,
+	 size == -1  (if(t,t,f) go to else exit)
+  4. file !=null -> filename exist,
+	 file was seeked to end,
+	 size != -1 (If(t,t,t) go {})
+	 
+	Inside first if
+	
+    if (NULL != (buffer = (GLchar*)malloc(size)))
+    5. buffer != null ( if(T) )
+    6. buffer == null ( if(F) ) If go to else exit
+    
+		Inside secound if
+      if (size != (long)fread(buffer, sizeof(GLchar), size, file))
+      7. size != wynik if(t)
+      8. size == wynik if(f)
+
+
+  // Rozmiar jest mniejszy od nagłówka
+    if (size <= sizeof(TGAHeader))
+    {
+      fprintf(stderr, "Too small file '%s'\n", filename);
+      free(buffer);
+      exit(EXIT_FAILURE);
+    }
+    
+    1. size <= sizeof(TGAHeader) ( t ) -> exit
+    2. size => sizeof(TGAHeader) ( f ) go forward
+    
+    if (header->datatype != 2 || (header->bitperpel != 24 && header->bitperpel != 32))
+    {
+      fprintf(stderr, "Wrong TGA format '%s'\n", filename);
+      free(buffer);
+      exit(EXIT_FAILURE);
+
+    }
+			T						T						T
+	1. header->datatype != 2 || (header->bitperpel != 24 && header->bitperpel != 32) 
+		header->datatype = 1,
+		header->bitperpel = 23,
+		header->bitperpel = 31
+		if(t,(t&t)) go forward
+		
+	2. header->datatype = 2,
+		header->bitperpel = 23,
+		header->bitperpel = 31
+		if(f||(t&t)) go forward
+		
+	3. header->datatype = 1,
+		header->bitperpel = 24,
+		header->bitperpel = 31
+		if(f||[F](F&t)) go to exit
+		
+	4. header->datatype = 1,
+		header->bitperpel = 23,
+		header->bitperpel = 32
+		if(f||[F](T&F)) go to exit
+		
+	5. header->datatype = 1,
+		header->bitperpel = 24,
+		header->bitperpel = 32
+		if(f||[F](F&F)) go to exit
+		
+	format = (header->bitperpel == 24 ? GL_BGR : GL_BGRA);
+  1.  header->bitperpel == 24, format=GL_BGR
+  2.  header->bitperpel != 24, format=GL_BGRA
+
+	internalFormat = (format == GL_BGR ? GL_RGB8 : GL_RGBA8);
+  1.  format == GL_BGR, format=GL_RGB8
+  2.  format != GL_BGR, format=GL_RGBA8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
